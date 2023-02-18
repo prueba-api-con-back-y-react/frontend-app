@@ -29,8 +29,9 @@ export default function Home() {
         <table className="table border shadow" id="table-to-xls">
           <thead>
             <tr>
-              <th scope="col">S.N</th>
+              <th scope="col">Id</th>
               <th scope="col">Name</th>
+              <th scope="col">Last Name</th>
               <th scope="col">Username</th>
               <th scope="col">Email</th>
             </tr>
@@ -42,6 +43,7 @@ export default function Home() {
                   <a href={`/viewuser/${user.id}`}>{index + 1}</a>
                 </th>
                 <td>{user.name}</td>
+                <td>{user.lastName}</td>
                 <td>{user.username}</td>
                 <td>{user.email}</td>
               </tr>

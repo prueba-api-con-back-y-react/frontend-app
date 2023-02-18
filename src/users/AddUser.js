@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import swal from "sweetalert";
 
 export default function AddUser() {
   let navigate = useNavigate();
@@ -8,10 +9,11 @@ export default function AddUser() {
   const [user, setUser] = useState({
     name: "",
     username: "",
+    lastName: "",
     email: "",
   });
 
-  const { name, username, email } = user;
+  const { name, username, lastName, email } = user;
 
   const onInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -19,8 +21,32 @@ export default function AddUser() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    showAlert2();
     await axios.post("http://localhost:8080/user", user);
     navigate("/");
+  };
+
+  const showAlert = async () => {
+    swal({
+      title: "Mensaje de confirmación",
+      text: "Te confirmamos que el usuario se ha creado correctamente",
+      icon: "success",
+      button: "Aceptar",
+      timer: "2000",
+    });
+  };
+
+  const showAlert2 = async () => {
+    swal({
+      title: "Crear usuario",
+      text: "Estás seguro que desea crear el usuario?",
+      icon: "warning",
+      buttons: ["No", "Sí"],
+    }).then((res) => {
+      if (res) {
+        showAlert();
+      }
+    });
   };
 
   return (
@@ -41,6 +67,21 @@ export default function AddUser() {
                 name="name"
                 value={name}
                 onChange={(e) => onInputChange(e)}
+                required="true"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Last Name" className="form-label">
+                Last Name
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your last name"
+                name="lastName"
+                value={lastName}
+                onChange={(e) => onInputChange(e)}
+                required="true"
               />
             </div>
             <div className="mb-3">
@@ -54,6 +95,7 @@ export default function AddUser() {
                 name="username"
                 value={username}
                 onChange={(e) => onInputChange(e)}
+                required="true"
               />
             </div>
             <div className="mb-3">
@@ -67,6 +109,7 @@ export default function AddUser() {
                 name="email"
                 value={email}
                 onChange={(e) => onInputChange(e)}
+                required="true"
               />
             </div>
             <button type="submit" className="btn btn-outline-primary">

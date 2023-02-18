@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import swal from "sweetalert";
 
 export default function EditUser() {
   let navigate = useNavigate();
@@ -10,13 +11,37 @@ export default function EditUser() {
   const [user, setUser] = useState({
     name: "",
     username: "",
+    lastName: "",
     email: "",
   });
 
-  const { name, username, email } = user;
+  const { name, lastName, username, email } = user;
 
   const onInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const showAlert = async () => {
+    swal({
+      title: "Mensaje de confirmación",
+      text: "Te confirmamos que el usuario se ha editado correctamente",
+      icon: "success",
+      button: "Aceptar",
+      timer: "2000",
+    });
+  };
+
+  const showAlert2 = async () => {
+    swal({
+      title: "Editar usuario",
+      text: "Estás seguro que desea editar el usuario?",
+      icon: "warning",
+      buttons: ["No", "Sí"],
+    }).then((res) => {
+      if (res) {
+        showAlert();
+      }
+    });
   };
 
   useEffect(() => {
@@ -52,6 +77,21 @@ export default function EditUser() {
                 name="name"
                 value={name}
                 onChange={(e) => onInputChange(e)}
+                required="true"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Last Name" className="form-label">
+                Last Name
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your lastname"
+                name="lastName"
+                value={lastName}
+                onChange={(e) => onInputChange(e)}
+                required="true"
               />
             </div>
             <div className="mb-3">
@@ -65,6 +105,7 @@ export default function EditUser() {
                 name="username"
                 value={username}
                 onChange={(e) => onInputChange(e)}
+                required="true"
               />
             </div>
             <div className="mb-3">
@@ -78,12 +119,22 @@ export default function EditUser() {
                 name="email"
                 value={email}
                 onChange={(e) => onInputChange(e)}
+                required="true"
               />
             </div>
-            <button type="submit" className="btn btn-outline-primary">
+            <button
+              type="submit"
+              className="btn btn-outline-primary"
+              onClick={() => {
+                showAlert2();
+              }}
+            >
               Submit
             </button>
-            <Link className="btn btn-outline-danger mx-2" to={`/viewuser/${user.id}`}>
+            <Link
+              className="btn btn-outline-danger mx-2"
+              to={`/viewuser/${user.id}`}
+            >
               Cancel
             </Link>
           </form>
